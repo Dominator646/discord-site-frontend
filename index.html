@@ -2,63 +2,49 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вход в систему</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        body { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; }
-        .glass { background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); }
+        body { background-color: #0f172a; overflow: hidden; }
+        .blob {
+            position: absolute; width: 500px; height: 500px;
+            background: linear-gradient(135deg, #5865F2 0%, #4752C4 100%);
+            filter: blur(80px); opacity: 0.15; z-index: -1; animation: move 20s infinite alternate;
+        }
+        @keyframes move { from { transform: translate(-10%, -10%); } to { transform: translate(20%, 20%); } }
+        .discord-btn {
+            background-color: #5865F2;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(88, 101, 242, 0.4);
+        }
+        .discord-btn:hover {
+            background-color: #4752C4;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(88, 101, 242, 0.6);
+        }
     </style>
 </head>
-<body class="flex items-center justify-center p-6 text-white font-sans">
-
-    <div class="glass w-full max-w-4xl rounded-3xl p-8 shadow-2xl flex flex-col md:flex-row gap-8">
-        
-        <div class="flex-shrink-0 text-center md:text-left border-b md:border-b-0 md:border-r border-white/10 pb-6 md:pb-0 md:pr-8">
-            <img id="avatar" src="https://via.placeholder.com/150" class="w-32 h-32 rounded-full border-4 border-indigo-400 mx-auto shadow-lg mb-4">
-            <h2 id="nickname" class="text-2xl font-bold italic">Загрузка...</h2>
-            <p class="text-indigo-200">Статус: Игрок</p>
-        </div>
-
-        <div class="flex-grow">
-            <h1 class="text-4xl font-black mb-6 tracking-tight">ВАШ БАЛАНС</h1>
-            
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div class="glass p-6 rounded-2xl bg-gradient-to-br from-yellow-400/20 to-transparent">
-                    <p class="text-sm uppercase tracking-widest text-yellow-200">Монеты</p>
-                    <p id="coins" class="text-3xl font-mono font-bold">0 🪙</p>
-                </div>
-
-                <div class="glass p-6 rounded-2xl bg-gradient-to-br from-green-400/20 to-transparent">
-                    <p class="text-sm uppercase tracking-widest text-green-200">Валюта</p>
-                    <p id="money" class="text-3xl font-mono font-bold">$0.00</p>
-                </div>
+<body class="flex items-center justify-center min-h-screen text-white">
+    <div class="blob"></div>
+    
+    <div class="text-center p-8 glass bg-white/5 border border-white/10 rounded-3xl backdrop-blur-xl max-w-md w-full mx-4">
+        <div class="mb-8">
+            <div class="w-20 h-20 bg-slate-800 rounded-full flex items-center justify-center mx-auto mb-4 border border-white/20">
+                <i class="fab fa-discord text-4xl text-[#5865F2]"></i>
             </div>
-
-            <button onclick="logout()" class="mt-8 px-6 py-2 bg-red-500/20 hover:bg-red-500/40 border border-red-500/50 rounded-lg transition-all">
-                Выйти из системы
-            </button>
+            <h1 class="text-3xl font-black tracking-tight mb-2">Добро пожаловать</h1>
+            <p class="text-slate-400">Авторизуйтесь, чтобы получить доступ к вашему профилю и монетам.</p>
         </div>
+
+        <a href="https://discord.com/api/oauth2/authorize?client_id=ТВОЙ_CLIENT_ID&redirect_uri=https://discord-site-backend-production.up.railway.app&response_type=code&scope=identify" 
+           class="discord-btn w-full py-4 px-6 rounded-xl font-bold flex items-center justify-center gap-3 text-lg">
+            <i class="fab fa-discord"></i>
+            Войти через Discord
+        </a>
+
+        <p class="mt-6 text-xs text-slate-500 uppercase tracking-widest">Secure OAuth2 Authorization</p>
     </div>
-
-    <script>
-        // Функция получения данных из Supabase
-        async function loadUserData() {
-            const params = new URLSearchParams(window.location.search);
-            const userId = params.get('user_id');
-
-            if (!userId) {
-                // Если ID нет, отправляем на регистрацию
-                window.location.href = 'https://discord.com/api/oauth2/authorize?client_id=ТВОЙ_ID&redirect_uri=...';
-                return;
-            }
-
-            // Здесь должен быть запрос к твоему API или напрямую к Supabase
-            // Имитируем получение данных:
-            document.getElementById('nickname').innerText = 'User_' + userId;
-            document.getElementById('coins').innerText = '1,250 🪙';
-            document.getElementById('money').innerText = '$45.00';
-        }
-
-        loadUserData();
-    </script>
 </body>
 </html>
